@@ -1,0 +1,75 @@
+\subsection{Strategy (策略)}
+
+\noindent\textbf{意图}
+
+定义一系列的算法，把它们一个个封装起来的，并且使它们可相互替换。本模式使得算法可独立于使用它的客户而变化。
+
+\textbf{别名}: policy
+
+\noindent\textbf{动机}
+
+在智能洗衣机上，我们可以选择快洗，慢洗，脱水，羊毛洗等等模式。这些模式即可以被称为做洗衣机的策略。
+
+\noindent\textbf{适用性}
+
+\begin{itemize}
+    \item 许多相关的类仅仅是行为有异。``策略''提供了一种用多个行为中的一个行为来配置一个类的方法。
+    \item 需要使用一个算法的不同变体。例如，你可能会定义一些反应不同的空间/时间权衡的算法。当这些变体实现为一个算法的类层次时，可以使用策略模式。
+    \item 算法使用客户不应该知道的数据。可使用策略模式以避免暴露复杂的，与算法相关的数据结构。
+    \item 一个类定义了多种行为，并且这些行为在这个类的操作中以多个条件语句的形式出现。将相关的条件分支移入它们各自的 Strategy 类中以替换这些条件语句。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+\begin{figure}[H]
+    \scriptsize
+    \centering
+    \begin{tikzpicture}[scale = 1]
+        \begin{class}[text width=2cm]{Context}{2,0}
+            \operation{ContextInterface()}
+        \end{class}
+        \begin{interface}[text width=2.5cm]{Strategy}{8,0}
+            \operation[0]{AlgorithmInterface()}
+        \end{interface}
+        \begin{class}[text width=2.5cm]{ConcreteStrategyA}{5,-2.5}
+            \implement{Strategy}
+            \operation{AlgorithmInterface()}
+        \end{class}
+        \begin{class}[text width=2.5cm]{ConcreteStrategyB}{8,-2.5}
+            \implement{Strategy}
+            \operation{AlgorithmInterface()}
+        \end{class}
+        \begin{class}[text width=2.5cm]{ConcreteStrategyC}{11,-2.5}
+            \implement{Strategy}
+            \operation{AlgorithmInterface()}
+        \end{class}
+        \aggregation{Context}{}{}{Strategy}
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+
+\begin{itemize}
+    \item \textbf{Strategy}: 定义所有支持的算法的公开接口。Context 使用这个接口来调用其 ConcreteStrategy 定义的算法。
+    \item \textbf{ConcreteStrategy}: 以 Strategy 接口实现某具体算法。
+    \item \textbf{Context}: 用一个 ConcreteStrategy 对象来配置; 维护一个对 Strategy 对象的引用; 可定义一个接口来让 Strategy 访问它的数据。
+\end{itemize}
+
+\noindent\textbf{优缺点}
+
+\begin{itemize}
+    \item \textbf{策略可复用}
+    \item \textbf{消除了一些条件语句}: 委托给了 Strategy 对象
+    \item \textbf{增加了对象的数目}: Strategy 结合 Flyweight 可以有效地缓解这个问题
+\end{itemize}
+
+\noindent\textbf{例子}
+
+\begin{itemize}
+    \item Java: \url{https://blog.csdn.net/youanyyou/article/details/116931663}
+    \item Video: \url{https://www.bilibili.com/video/BV1oi4y1g7Nn}
+\end{itemize}
+
+\lstinputlisting[language=Python]{../../../scripts/behavioral/Strategy.py}
+
+\newpage

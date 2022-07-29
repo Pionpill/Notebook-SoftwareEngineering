@@ -1,0 +1,83 @@
+\subsection{ChainofResponsibility (职责链)}
+
+\noindent\textbf{意图}
+
+使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合关系。将这些对象连城一条链，并沿着这条链传递该请求，直到有一个对象处理它为止。
+
+\noindent\textbf{动机}
+
+假设某大学生需要请假出校，向学院客户端发送了请假申请。如果当天去当天回，则由辅导员审批即可；如果需要请假1-7天，则由辅导员交给学院领导审批；如果需要休学，则由学院向学校申请审批。
+
+在上述过程中，辅导员，学院，学校都可以对出校申请进行审批，这三者对请假处理事件构成了责任链。
+
+\noindent\textbf{适用性}
+
+\begin{itemize}
+    \item 有多个对象可以处理一个请求，哪个对象处理该请求运行时自动确定。
+    \item 你想在不明确指定接收者的情况下，向多个对象中的一个提交一个请求。
+    \item 可处理一个请求的对象集合应被动态指定。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+\begin{figure}[H]
+    \scriptsize
+    \centering
+    \begin{tikzpicture}[scale = 1]
+        \begin{class}[text width=2cm]{Client}{0,0}
+        \end{class}
+        \begin{interface}[text width=2.5cm]{Handler}{5,0}
+            \operation[0]{HandlerRequest()}
+        \end{interface}
+        \begin{class}[text width=2.5cm]{ConcreteHandler1}{3,-2.5}
+            \implement{Handler}
+            \operation{HandlerRequest()}
+        \end{class}
+        \begin{class}[text width=2.5cm]{ConcreteHandler2}{7,-2.5}
+            \implement{Handler}
+            \operation{HandlerRequest()}
+        \end{class}
+        \draw[umlcd style,fill=white,->] (Client) -- (Handler);
+        \draw[umlcd style,fill=white,fill opacity =0,{diamond}->] (Handler) -- ++(3cm,0) -- ++(0,1.2cm) -| (Handler);
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+
+\begin{itemize}
+    \item \textbf{Handler}: 定义一个处理请求的接口；实现后继链。
+    \item \textbf{ConcreteHandler}: 处理负责的请求；访问后继者。
+    \item \textbf{Client}: 向链上的具体处理者对象提交请求。
+\end{itemize}
+
+\noindent\textbf{协作}
+
+\begin{itemize}
+    \item 当客户提交一个请求时，请求沿链传递直至有一个 ConcreteHandler 对象负责处理它。
+\end{itemize}
+
+\noindent\textbf{优缺点}
+
+\begin{itemize}
+    \item \textbf{降低耦合度}: 使得一个对象无需知道是其他哪一个对象处理其请求。对象仅需要知道该请求会被``正确''处理。
+    \item \textbf{增强了给对象指派职责的灵活性}: 当在对象中分派职责时，职责链给你更多的灵活性。
+    \item \textbf{不保证被接受}: 既然一个请求没有明确的接收者，那么就不保证它一定会被处理(可能直到末端都不会被处理)。
+\end{itemize}
+
+\noindent\textbf{实现}
+
+\begin{itemize}
+    \item \textbf{实现后继者链}: 有两种方法可以实现后继者链。1. 定义新的链接。 2. 使用已有的链接。
+    \item \textbf{连接后继者}: 如果没有已有的引用可定义一个链，那么你必须自己引入它们。这种情况下 Handler 不仅定义该请求的接口，通常也维护后继者。
+\end{itemize}
+
+\noindent\textbf{例子}
+
+\begin{itemize}
+    \item Java: \url{https://blog.csdn.net/qq359605040/article/details/122718721}
+    \item Video: \url{https://www.bilibili.com/video/BV1uk4y127hG}
+\end{itemize}
+
+\lstinputlisting[language=Python]{../../../scripts/behavioral/ChainofResponsibility.py}
+
+\newpage

@@ -1,0 +1,91 @@
+\subsection{Composite (组合)}
+
+\noindent\textbf{意图}
+
+将对象组合成树形结构以表示 ``整体-部分'' 的层次结构。 Composite 使得用户对单个对象和组合对象的使用具有一致性。
+
+\noindent\textbf{动机}
+
+Composite 对应 UML 中的组合关系，注意 UML 中组合(composition)和聚合(aggregation)的区别:
+\begin{itemize}
+    \item 聚合: has-a 关系，部分可以脱离整体存在，如学校有老师，学校不存在了，老师依然存在。
+    \item 组合: part-of 关系，部分不可以脱离主体存在，如脸上有嘴巴，没有脸，嘴巴不能单独存在。
+\end{itemize}
+
+\noindent\textbf{适用性}
+
+\begin{itemize}
+    \item 想表达部分-整体层次。
+    \item 希望用户忽略组合对象与单个对象的不同。用户将统一地使用组合结构中的所有对象。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+\begin{figure}[H]
+    \scriptsize
+    \centering
+    \begin{tikzpicture}[scale = 1]
+        \begin{class}[text width=2cm]{Client}{0,0}
+        \end{class}
+        \begin{interface}[text width=2.5cm]{Component}{4,0}
+            \operation[0]{Operation()}
+            \operation[0]{Add()}
+            \operation[0]{Remove(Component)}
+            \operation[0]{GetChild(int)}
+        \end{interface}
+        \begin{class}[text width=2cm]{Leaf}{2,-4}
+            \implement{Component}
+            \operation{Operation()}
+        \end{class}
+        \begin{class}[text width=2.5cm]{Composite}{6,-4}
+            \implement{Component}
+            \operation{Operation()}
+            \operation{Add()}
+            \operation{Remove(Component)}
+            \operation{GetChild(int)}
+        \end{class}
+        \draw[umlcd style,fill=white,->] (Client) -- (Component);
+        \draw[umlcd style,fill opacity =0,{diamond}->] (Composite) -- ++(2,0) |- (Component);
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+
+\begin{itemize}
+    \item \textbf{Component}: 为组合中的对象声明接口，声明接口用于访问和管理 Component 子组件。
+    \item \textbf{Leaf}: 在组合中表示叶节点对象，定义行为。
+    \item \textbf{Composite}: 定义有子部件的那些部件的行为；存储子部件；在 Component 接口中实现与子部件有关的操作。
+    \item \textbf{Client}: 通过 Component 接口操纵组合部件的对象。
+\end{itemize}
+
+\noindent\textbf{协作}
+
+\begin{itemize}
+    \item 用户使用 Component 类接口与组合结构中的对象进行交互。如果接收者是一个叶节点，则直接处理请求。如果接受者是 Composite，它通过将请求发送给它的子部件在转发请求之前和/或之后可能执行一些辅助操作。
+\end{itemize}
+
+\noindent\textbf{优缺点}
+
+\begin{itemize}
+    \item \textbf{定义了包含基本对象和组合对象的类层次结构}
+    \item \textbf{使得更容易增加新型的组件}
+    \item \textbf{使你的设计变得更加一般化}
+\end{itemize}
+
+\noindent\textbf{实现}
+
+\begin{itemize}
+    \item \textbf{显式的父部件引用}: 保持子部件到父部件的引用能简化组合结构的便利和管理。通常在 Component 类中定义父部件引用。Leaf 和 Composite 类可以继承这个引用以及管理这个引用的哪些操作。
+    \item \textbf{共享组件}: 共享组件可以减少对存储的需求。一个组件应该有多个父组件，但这会导致二义性问题，Flyweight 模式讨论了如何修改设计。
+    \item \textbf{最大化 Component 接口}: Composite 模式的目的之一是使得用户不知道他们正在使用的具体的 Leaf 和 Composite 类。为了达到这一目的，Composite 类应为 Leaf 和 Composite 类尽可能多定义一些公共操作。
+\end{itemize}
+
+\noindent\textbf{例子}
+
+\begin{itemize}
+    \item 视频: \url{https://www.bilibili.com/video/BV1854y147ez}
+\end{itemize}
+
+\lstinputlisting[language=Python]{../../../scripts/structural/Composite.py}
+
+\newpage

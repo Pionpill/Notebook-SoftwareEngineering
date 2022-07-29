@@ -1,0 +1,19 @@
+@startuml Observer
+participant ConcreteSubject as Subject
+participant ConcreteObserverA as ObserverA
+participant ConcreteObserverB as ObserverB
+activate Subject
+activate ObserverA
+ObserverA -> Subject: SetState()
+deactivate ObserverA 
+Subject -> Subject: Notify()
+Subject -> ObserverA: Update()
+activate ObserverA
+ObserverA -> Subject: GetState()
+deactivate ObserverA
+Subject -> ObserverB: Update()
+activate ObserverB
+ObserverB -> Subject: GetState()
+deactivate ObserverB
+deactivate Subject
+@enduml

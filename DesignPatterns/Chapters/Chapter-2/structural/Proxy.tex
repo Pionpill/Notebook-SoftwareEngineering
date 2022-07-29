@@ -1,0 +1,79 @@
+\subsection{Proxy (代理)}
+
+\noindent\textbf{意图}
+
+为其他对象提供一种代理以控制对这个对象的访问。
+
+别名: Surrogate
+
+\noindent\textbf{动机}
+
+当一个对象进行访问控制的一个原因是: 只有我们确实需要这个对象时才对它进行创建和初始化。
+
+例如我们需要访问谷歌，但由于不可名状的原因，我们无法通过浏览器直接访问。但是我们可以通过一些代理软件简介访问服务器。
+
+总而言之，仅通过代理类才能访问到背后的对象。
+
+\noindent\textbf{适用性}
+
+\begin{itemize}
+    \item \textbf{远程代理}: 为一个对象在不同的地址空间提供局部代表。
+    \item \textbf{虚代理}: 根据需要创建开销很大的对象。
+    \item \textbf{保护代理}: 控制对原始对象的访问。保护代理用于对象应该有不同的访问权限的时候。
+    \item \textbf{智能代理}: 取代了简单的指针，再访问对象时执行一些附加操作。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+\begin{figure}[H]
+    \scriptsize
+    \centering
+    \begin{tikzpicture}[scale = 1]
+        \begin{class}[text width=2cm]{Client}{0,0}
+        \end{class}
+        \begin{interface}[text width=2cm]{Subject}{5,0}
+            \operation[0]{Request()}
+        \end{interface}
+        \begin{class}[text width=2cm]{RealSubject}{3,-3}
+            \implement{Subject}
+            \operation{Request()}
+        \end{class}
+        \begin{class}[text width=2cm]{Proxy}{7,-3}
+            \implement{Subject}
+            \operation{Request()}
+        \end{class}
+        \draw[umlcd style,fill=white,->] (Client) -- (Subject);
+        \draw[umlcd style,fill=white,->] (Proxy) -- (RealSubject);
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+
+\begin{itemize}
+    \item \textbf{Proxy}: 保存一个引用使得代理可以访问实体；控制对实体的存取，并可能负责创建和删除它。
+    \item \textbf{Subject}: 定义 RealSubject 和 Proxy 的共用接口，这样就在任何使用 RealSubject 的地方都可以使用 Proxy
+    \item \textbf{RealSubject}: 定于 Proxy 所代表的实体。
+\end{itemize}
+
+\noindent\textbf{协作}
+
+\begin{itemize}
+    \item 代理根据其种类，再适当的时候向 RealSubject 转发请求。
+\end{itemize}
+
+\noindent\textbf{优缺点}
+
+\begin{itemize}
+    \item Peoxy 模式再访问对象时引入了一定程度的间接性。
+\end{itemize}
+
+\noindent\textbf{实例}
+
+\begin{itemize}
+    \item Java: \url{https://blog.csdn.net/xiaofeng10330111/article/details/105633821}
+    \item Video: \url{https://www.bilibili.com/video/BV15V411z7nD}
+\end{itemize}
+
+\lstinputlisting[language=Python]{../../../scripts/structural/Proxy.py}
+
+\newpage

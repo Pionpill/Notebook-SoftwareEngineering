@@ -1,0 +1,27 @@
+@startuml Builder
+participant Client
+participant Director 
+participant ConcreteBuilder
+activate Client
+Client --> ConcreteBuilder: new ConcreteBuilder
+activate ConcreteBuilder
+deactivate ConcreteBuilder
+Client --> Director: new Director(ConcreteBuilder)
+activate Director
+deactivate Director
+Client -> Director: Construct()
+activate Director
+Director -> ConcreteBuilder: BuildPartA()
+activate ConcreteBuilder
+deactivate ConcreteBuilder
+Director -> ConcreteBuilder: BuildPartB()
+activate ConcreteBuilder
+deactivate ConcreteBuilder
+Director -> ConcreteBuilder: BuildPartC()
+activate ConcreteBuilder
+deactivate ConcreteBuilder
+deactivate Director
+Client -> ConcreteBuilder:GetResult()
+activate ConcreteBuilder
+deactivate ConcreteBuilder
+@enduml

@@ -1,0 +1,87 @@
+\subsection{Bridge (桥接)}
+
+\noindent\textbf{意图}
+
+将抽象部分与它的实现部分分离，使他们可以独立地变化。
+
+别名: Handle/Body
+
+\noindent\textbf{动机}
+
+当一个抽可能有多个实现时，通常用继承来协调它们。抽象类定义对改抽象的接口，而具体的子类则用不同方式加以是实现。但是此方法有时候不够灵活。继承机制将抽象部分与它的实现部分固定在一起，使得难以对抽象部分和实现部分独立地进行修改，扩充和复用。
+
+假设需要设计 3 种颜色 4 类形状的图案，那么就需要在图案类下派生出 12 个不同的子类以实现全部的图案样式。而如果现在又新增了一种颜色，就又需要派生出 4 个新的类，这显然非常复杂。
+
+一种好的方式是将颜色和图案非为不同的类，让图案类包含颜色元素。这样我们就只需要编写 7 个类，再添加功能时也只需要添加一个基类。
+
+桥接模式将继承关系转换成关联关系，从而降低了类与类之间的耦合，减少了代码的编写量。
+
+\noindent\textbf{适用性}
+
+\begin{itemize}
+    \item 不希望再抽象和实现部分之间有一个固定的关系。
+    \item 类的抽象和实现都应该可以通过生成子类的方法加以扩充。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+\begin{figure}[H]
+    \scriptsize
+    \centering
+    \begin{tikzpicture}[scale = 1]
+        \begin{class}[text width=2cm]{Client}{0,0}
+        \end{class}
+        \begin{interface}[text width=2.5cm]{Abstraction}{4,0}
+            \operation{Operation()}
+        \end{interface}
+        \begin{interface}[text width=2.5cm]{Implementor}{11,0}
+            \operation[0]{OperationImp()}
+        \end{interface}
+        \aggregation{Abstraction}{imp}{}{Implementor}
+        \begin{class}[text width=2.5cm]{RefinedAbstraction}{4,-3}
+            \implement{Abstraction}
+        \end{class}
+        \begin{class}[text width=3cm]{ConcreteImplementorA}{9,-3}
+            \implement{Implementor}
+            \operation{OperationImp()}
+        \end{class}
+        \begin{class}[text width=3cm]{ConcreteImplementorB}{13,-3}
+            \implement{Implementor}
+            \operation{OperationImp()}
+        \end{class}
+        \draw[umlcd style,fill=white,->] (Client) -- (Abstraction);
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+
+\begin{itemize}
+    \item \textbf{Abstraction}: 定义抽象类接口，维护指向 Implementor 类型的指针。
+    \item \textbf{RefinedAbstraction}: 扩充由 Abstraction 定义的接口。
+    \item \textbf{Implementor}: 定义实现类的接口。
+    \item \textbf{ConcreteImplementor}: 实现 Implementot 接口并定义它的具体实现。
+\end{itemize}
+
+\noindent\textbf{协作}
+
+\begin{itemize}
+    \item Abstraction 将 client 的请求转发给它的 Implementor 对象。
+\end{itemize}
+
+\noindent\textbf{优缺点}
+
+\begin{itemize}
+    \item \textbf{分离接口与实现部分}: 实现未必要绑定在接口上，抽象类的实现可以再运行时进行配置，一个对象甚至可以在运行时改变它的实现。
+    \item \textbf{提高可扩充性}: 可以独立地对 Abstraction 和 Implementor 层次结构进行扩充。
+\end{itemize}
+
+\noindent\textbf{例子}
+
+\begin{itemize}
+    \item Java: \url{https://blog.csdn.net/en_joker/article/details/82839813}
+    \item Video: \url{https://www.bilibili.com/video/BV1Pp4y167DG}
+\end{itemize}
+
+\lstinputlisting[language=Python]{../../../scripts/structural/Bridge.py}
+
+\newpage

@@ -1,0 +1,90 @@
+\subsection{Prototype (原型)}
+
+\noindent\textbf{意图}
+
+用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。
+
+\noindent\textbf{动机}
+
+如果我们需要创建同一个类的多个实例，这需要给这些实例分配大量的内存，消耗 CPU 资源。而在有些情况下，往往这些实例的属性是相同或者只有极小的差别。
+
+为了释放内存资源，提高性能，我们采用原型模式，直接在内存中拷贝已有的实例。
+
+\noindent\textbf{适用性}
+
+下列情况可以使用 Prototype 模式:
+\begin{itemize}
+    \item 一个系统独立于它的产品创建，构成和表示时。
+    \item 要实例化的类是在运行时指定的，例如动态转载。
+    \item 避免创建一个与产品类层次平行的工厂层次时。
+    \item 一个类的实例只有几个不同状态中的一种时。建立原型并克隆他们。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+\begin{figure}[H]
+    \scriptsize
+    \centering
+    \begin{tikzpicture}[scale = 1]
+        \begin{class}[text width=2.5cm]{Client}{0,0}
+            \operation{Operation()}
+        \end{class}
+        \begin{interface}[text width=2.5cm]{Prototype}{7,0}
+            \operation[0]{Clone()}
+        \end{interface}
+        \draw[umlcd style,->] (Client) -- (Prototype);
+        \begin{class}[text width=3cm]{ConcretePrototypr1}{4,-3}
+            \implement{Prototype}
+            \operation{Clone():return copy of self}
+        \end{class}
+        \begin{class}[text width=3cm]{ConcretePrototypr2}{10,-3}
+            \implement{Prototype}
+            \operation{Clone():return copy of self}
+        \end{class}
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+\begin{itemize}
+    \item \textbf{Prototype}: 声明一个克隆自身的接口
+    \item \textbf{ConcretePrototype}: 实现一个克隆自身的操作
+    \item \textbf{Client}: 让原型克隆自身从而创建一个新的对象
+\end{itemize}
+
+\noindent\textbf{协作}
+
+\begin{itemize}
+    \item 客户请求一个原型克隆自身。
+\end{itemize}
+
+\noindent\textbf{优缺点}
+
+\begin{itemize}
+    \item \textbf{运行时增加和删除产品}: 允许客户注册原型实例就将一个新的具体产品类并入系统。比其它创建型模式更灵活。
+    \item \textbf{减少子类构造}
+    \item \textbf{动态配置应用}
+\end{itemize}
+
+\noindent\textbf{实现}
+
+\begin{itemize}
+    \item \textbf{使用原型管理器}: 当一个系统中原型数目不固定时，要保持一个可用原型的注册表。在注册表中存储和检索原型，我们通常称之为原型管理器(Prototype Manager)。
+    \item \textbf{实现克隆操作}: Prototype 模式最难实现的地方在于实现 Clone 操作。当对象包含循环时，者尤其棘手。
+\end{itemize}
+
+\noindent\textbf{相关模式}
+
+\begin{itemize}
+    \item \textbf{Abstract Factory}: 在某些方面，这两个模式是相互竞争的，但他们也可以一起使用。Abstract Factory 可以存储一个被克隆的原型的集合，并返回产品对象。
+    \item \textbf{Composite/Decorator}: 这两个设计模式可以从 Prototype 中获益。
+\end{itemize}
+
+\noindent\textbf{代码}
+
+\begin{itemize}
+    \item Java 实现 Prototype: \url{https://blog.csdn.net/qq_38526573/article/details/87633257}
+\end{itemize}
+
+\lstinputlisting[language=Python]{../../../scripts/creational/Prototype.py}
+
+\newpage

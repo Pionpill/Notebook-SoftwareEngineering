@@ -1,0 +1,98 @@
+\subsection{Visitor (访问者)}
+
+\noindent\textbf{意图}
+
+表示一个作用于某对象结构中的个元素的操作。它使你可以再不改变各元素的类的前提下定义作用于这些元素的新操作。
+
+\noindent\textbf{动机}
+
+考虑这样一种情形，现在有机器人一代，它具有一些简单的功能。由于客户不满意一代机器人的功能，公司程序员在不改变硬件芯片的前提下，对机器人系统进行了更新，将所有机器人返厂并推出了二代机器人。
+
+这种不改变原有机器人硬件，系统可以更新的模式；就可以视作访问者模式。
+
+\noindent\textbf{适用性}
+
+\begin{itemize}
+    \item 一个对象包括很多类的对象，它们有不同的接口，而你相对这些对象实施一些依赖于具体类的操作。
+    \item 需要对一个对象结构中的对象进行很多不同并且不相关的操作，而你想避免让这些操作``污染''这些对象的类。Visitor 使得你可以将相关的操作集中起来定义在一个类中。
+    \item 定义对象结构的类很少改变，但经常需要在此结构上定义新的操作。改变对象结构类需要重新定义所有访问者的接口，这可能需要很大的代价。如果对象结构类经常改变，那么可能还是在这些类中定义这些操作比较好。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+\begin{figure}[H]
+    \scriptsize
+    \centering
+    \begin{tikzpicture}[scale = 1]
+        \begin{class}[text width=2cm]{Client}{0,0}
+        \end{class}
+        \begin{interface}[text width=5cm]{Visitor}{8,0}
+            \operation[0]{VisitConcreteElementA(ConcreteElementA)}
+            \operation[0]{VisitConcreteElementB(ConcreteElementB)}
+        \end{interface}
+        \begin{class}[text width=5cm]{ConcreteVisitor1}{5,-3}
+            \implement{Visitor}
+            \operation{VisitConcreteElementA(ConcreteElementA)}
+            \operation{VisitConcreteElementB(ConcreteElementB)}
+        \end{class}
+        \begin{class}[text width=5cm]{ConcreteVisitor2}{11,-3}
+            \implement{Visitor}
+            \operation{VisitConcreteElementA(ConcreteElementA)}
+            \operation{VisitConcreteElementB(ConcreteElementB)}
+        \end{class}
+        \begin{class}[text width=3cm]{ObjectStructure}{3,-6}
+        \end{class}
+        \begin{interface}[text width=3cm]{Element}{8,-6}
+            \operation[0]{Accept(Visitor)}
+        \end{interface}
+        \begin{class}[text width=6cm]{ConcreteElement1}{4.5,-8}
+            \implement{Element}
+            \operation{Accept(Visitor v): v->VisitConcreteElementA(this)}
+            \operation{OperationA}
+        \end{class}
+        \begin{class}[text width=6cm]{ConcreteElement2}{11.5,-8}
+            \implement{Element}
+            \operation{Accept(Visitor v): v->VisitConcreteElementB(this)}
+            \operation{OperationB}
+        \end{class}
+        \draw[umlcd style,->] (Client) -- (Visitor);
+        \draw[umlcd style,fill opacity=0,->] (Client) |- (ObjectStructure);
+        \draw[umlcd style,fill opacity=0,->] (ObjectStructure) -- (Element);
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+
+\begin{itemize}
+    \item \textbf{Visitor}: 为该对象结构中 ConcreteElement 的每一个类声明一个 Visit 操作。改操作的名字和特征标识了发送 Visit 请求给该访问者的类。这使得访问者可以确定正被访问元素的具体的类。这样该访问者就可以通过该元素的特定接口直接访问它。
+    \item \textbf{ConcreteVisitor}: 实现每个由 Visitor 声明的操作。
+    \item \textbf{Element}: 定义一个 Accept 操作，它以一个访问者为参数。
+    \item \textbf{ConcreteElement}: 实现 Accept 操作，该操作以一个访问者为参数。
+    \item \textbf{ObjectStructure}: 提供一个高层的接口以允许该访问者为参数。
+\end{itemize}
+
+\noindent\textbf{协作}
+
+一个使用 Visitor 模式的客户必须创建一个 ConcreteVisitor 对象，然后便利该对象结构，并用该访问者访问每一个元素。
+
+当一个元素被访问时，它调用对应于它的类的 Visitor 操作。如果有必要，该元素将自身作为这个操作的一个参数，以便该访问者访问它的状态。
+
+\noindent\textbf{优缺点}
+
+\begin{itemize}
+    \item \textbf{易于增加新操作}
+    \item \textbf{访问者集中相关的操作而分离无关的操作}
+    \item \textbf{增加新的 ConcreteElement 类很困难}: 每添加一个 Element 子类就需要创建一个对应的 ConcreteVisitor 类。
+    \item \textbf{破坏封装}: 访问者方法假定 ConcreteElement 接口的功能足够强，足以让访问者进行工作，但往往需要提供访问元素内部状态的公共操作，这可能会破坏它的封装性。
+\end{itemize}
+
+\noindent\textbf{例子}
+
+\begin{itemize}
+    \item Java: \url{https://blog.csdn.net/zhengzhb/article/details/7489639}
+    \item Video: \url{https://www.bilibili.com/video/BV1nt4y1k7j5}
+\end{itemize}
+
+\lstinputlisting[language=Python]{../../../scripts/behavioral/Visitor.py}
+
+\newpage

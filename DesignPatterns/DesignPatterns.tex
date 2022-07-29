@@ -1,0 +1,90 @@
+\documentclass{PionpillNote-book}
+
+
+% \import{Parts/style}{tikz-style.tex}
+
+\title{\Huge{设 \hspace{17pt} 计 \hspace{17pt} 模 \hspace{17pt} 式} \\ \large{可复用的面向对象软件的基础}}
+\author{
+    Pionpill \footnote{笔名：北岸，电子邮件：673486387@qq.com，Github：\url{https://github.com/Pionpill}} \\
+    本文为 设计模式\footnote{英文原名: Desgin Patterns Elements of Reusable Object-Oriented Software} 一书的简单笔记\\
+}
+
+\date{\today}
+
+\begin{document}
+
+\pagestyle{plain}
+
+\maketitle
+
+\noindent\textbf{前言：}
+
+在阅读本文之前，默认已经掌握基本的面向对象思想，对 Java/Python... 语法有基础的了解(至少看得懂)，且有一定的项目经验。
+
+由于原书出版在上世纪，有些当时新颖的理念在现在已经成为一些主流的设计方案，因此本人不会对一些基础的内容进行过多说明，如有需要还请查看原文。
+
+原文使用 C++/Smalltalk 语言，即使 C++ 仍具有很高的热度，但已不及 Python/Java... 这些新的高级语言，此外 C++ 的语法毋庸置疑比较复杂，我们应更加关注设计模式而不是语言实现本身，因此本人使用的例子更多参考了 CSDN 等技术社区的其它例子。
+
+一般地，本文的 Java 例子使用连接，Python 则直接贴出代码，主要是因为 Python 代码简短，可读性强。这些 Python 例子源自于 python-patterns 项目，有稍许修改。受限于长度，这些代码往往并不完全符合模式结构，就例子本身实现的作用来看，有些设计模式甚至显得多余冗长，毕竟在一个几百行只有一个文件的脚本中使用设计模式本身就显得多余。因此希望读者仅将示例用作理解设计模式，而不是按部就班。
+
+本文只介绍性地说明了各个设计模式，并没有深入挖掘设计模式，原因如下:
+\begin{itemize}
+    \item 本人能力与实战经验有限。
+    \item 由于各语言的特性不同，无法给出统一的回答。比如，如果要在 Java/Python 中实现 Singleton 模式，在 Java 中考虑到线程安全问题，往往要写出比较复杂的代码，如果再涉及到多个 JVM 虚拟机，问题变得更加复杂，而且需要一些 Java 高级特性的知识。而在 Python 中只需要结合装饰器用简单的代码就可以完成。
+    \item 详细解读一个设计模式，往往需要项目作为例子，这并不是一两个文件，几百行代码就能解释清楚的。
+\end{itemize}
+
+此外，本文的结构和原文大不相同，请将本文当作字典查阅相关知识而不是和原书一般循序渐进地阅读。
+
+本人的书写环境:
+\begin{itemize}
+    \item Window10
+\end{itemize}
+
+参考文献:
+\begin{itemize}
+    \item python-patterns: \url{https://github.com/faif/python-patterns}
+\end{itemize}
+
+\date{\today}
+\tableofcontents
+\newpage
+
+\setcounter{page}{1} 
+\pagestyle{fancy}
+
+\chapter{介绍}
+\import{Chapters/Chapter-1}{Introduction.tex}
+\chapter{设计模式}
+\section{创建型模式}
+\import{Chapters/Chapter-2/creational}{AbstractFactory.tex}
+\import{Chapters/Chapter-2/creational}{Builder.tex}
+\import{Chapters/Chapter-2/creational}{FactoryMethod.tex}
+\import{Chapters/Chapter-2/creational}{Prototype.tex}
+\import{Chapters/Chapter-2/creational}{Singleton.tex}
+
+\section{结构模式}
+\import{Chapters/Chapter-2/structural}{Adapter.tex}
+\import{Chapters/Chapter-2/structural}{Bridge.tex}
+\import{Chapters/Chapter-2/structural}{Composite.tex}
+\import{Chapters/Chapter-2/structural}{Decorator.tex}
+\import{Chapters/Chapter-2/structural}{Facade.tex}
+\import{Chapters/Chapter-2/structural}{Flyweight.tex}
+\import{Chapters/Chapter-2/structural}{Proxy.tex}
+
+\section{行为模式}
+\import{Chapters/Chapter-2/behavioral}{ChainofResponsibility.tex}
+\import{Chapters/Chapter-2/behavioral}{Command.tex}
+\import{Chapters/Chapter-2/behavioral}{Interpreter.tex}
+\import{Chapters/Chapter-2/behavioral}{Iterator.tex}
+\import{Chapters/Chapter-2/behavioral}{Mediator.tex}
+\import{Chapters/Chapter-2/behavioral}{Memento.tex}
+\import{Chapters/Chapter-2/behavioral}{Observer.tex}
+\import{Chapters/Chapter-2/behavioral}{State.tex}
+\import{Chapters/Chapter-2/behavioral}{Strategy.tex}
+\import{Chapters/Chapter-2/behavioral}{Template.tex}
+\import{Chapters/Chapter-2/behavioral}{Visitor.tex}
+
+
+\end{document}
+

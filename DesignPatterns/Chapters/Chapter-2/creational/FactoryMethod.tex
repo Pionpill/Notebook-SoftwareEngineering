@@ -1,0 +1,83 @@
+\subsection{Factory Method (工厂方法)}
+
+\noindent\textbf{意图}
+
+定义一个用于创建对象的接口，让子类决定实例化哪一个类。Factory Method 使一个类的实例化延迟到子类。
+
+\noindent\textbf{动机}
+
+假设我们有一个产品 A，随着用户需求变化，需要生产 B 类产品。改变原有的配置非常困难，假设用户下一次再发生变化，再次改变将增大成本。因此我们可以为每类产品创建对应的工厂函数。
+
+工厂模式是 new 的一个替代品，他有诸多好处，但与此同时，他会增加代码复杂度，需要读者慎重考虑。
+
+\noindent\textbf{适用性}
+
+以下情况可以使用 Factory Method 模式:
+\begin{itemize}
+    \item 当一个类不知道它所必须创建的对象的类的时候。
+    \item 当一个类希望由它的子类来指定它所创建的对象的时候。
+    \item 当类将创建对象的职责委托给多个帮助子类中的一个，并且你希望将哪一个帮助子类是代理者这一信息局部化的时候。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+\begin{figure}[H]
+    \centering
+    \scriptsize
+    \begin{tikzpicture}[scale = 1]
+        \begin{interface}[text width=2.5cm]{Product}{0,0}
+        \end{interface}
+        \begin{class}[text width=3cm]{ConcreteProduct}{0,-3}
+            \inherit{Product}
+        \end{class}
+        \begin{interface}[text width=2.5cm]{Creator}{5.5,0}
+            \operation[0]{FactoryMethod()}
+            \operation{AnOperation()}
+        \end{interface}
+        \begin{class}[text width=2.5cm]{ConcreteCreator}{5.5,-3}
+            \inherit{Creator}
+            \implement{ConcreteProduct}
+            \operation{FactoryMethod()}
+        \end{class}
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+
+\begin{itemize}
+    \item \textbf{Product}: 定义工厂方法所创建的对象的接口。
+    \item \textbf{ConcreteProduct}: 实现 Product 接口。
+    \item \textbf{Creator}: 声明工厂方法，返回一个 Product 类型的对象。Creator 也可以定义一个工厂方法的缺省实现，返回一个缺省的 ConcreteProduct 对象。可以调用工厂方法以创建一个 Product 对象。
+    \item \textbf{ConcreteCreator}: 重定义工厂方法以返回一个 ConcreteProduct 实例。
+\end{itemize}
+
+\noindent\textbf{协作}
+
+\begin{itemize}
+    \item Creator 依赖于它的子类来定义工厂方法，所以它返回一个适当的 ConcreteProduct 实例。
+\end{itemize}
+
+\noindent\textbf{优缺点}
+
+\begin{itemize}
+    \item \textbf{为子类提供钩子}: 用工厂方法再一个类的内部创建对象通常比直接创建对象更灵活。Factory Method 给子类一个钩子以提供对象的扩展版本。
+    \item \textbf{连接平行的类层次}
+    \item \textbf{代码复杂}
+\end{itemize}
+
+\noindent\textbf{实现}
+
+\begin{itemize}
+    \item \textbf{参数化工厂方法}: 采用一个标识要被创建的对象种类的参数，以创建多种产品。
+    \item \textbf{使用模板以避免创建子类}: 我们可能会为了创建适当的 Product 对象而被迫创建 Creator 子类。我们可以提供 Creator 的一个模板子类，使用 Product 类作为模板参数。
+\end{itemize}
+
+\noindent\textbf{代码}
+
+\begin{itemize}
+    \item Java 实现 Factory Method: \url{https://blog.csdn.net/varyall/article/details/82355964}
+\end{itemize}
+
+\lstinputlisting[language=Python]{../../../scripts/creational/FactoryMethod.py}
+
+\newpage

@@ -1,0 +1,186 @@
+\subsection{Abstract Factory (抽象工厂)}
+\noindent\textbf{意图}
+
+提供一个接口以创建一系列相关或互相依赖的对象，而无须指定它们具体的类。
+
+抽象工厂模式将对象的\textbf{创建}与\textbf{获取}隔离开，使对象的\textbf{获取不依赖于它的具体类}，而是依赖于一个封装具体对象创建的工厂类，使用者不需要关心这些工厂类创建具体对象的细节。
+
+别名: Kit
+
+\noindent\textbf{动机}
+
+假设我们在编写 GUI，此时由于客户需要，我们将编写多套组件(滚动条，按钮等)，相同的组件套中美术风格一致。那么很显然，我们需要在已有 GUI 的基础上集成修改，假设有 White,Dark 两种风格，则每个组件类需要派生出两个对应的类。如果没有设计模式，我们会直接调用构造函数来实例化这些小组件，这是可行的，但如果我们以后需要修改某个类，如果对类名进行了修改，或者要弃用之前的 \texttt{WhiteAWidget} 改用 \texttt{WhiteBWidget}, 我们往往需要修改所有的构造函数，这使得维护变得一团糟且很容易犯错，并且我们的两套组件之间并没有明显的区别，仅能通过类名中的 White/Dark 这些单词区别。
+
+为了解决这个问题，我们可以定义抽象 \texttt{WidgetFactory} 类，这个类声明了一个用来创建每一类基本组建的接口。这些接口将负责获取组件实例，而客户不需要知道正在使用的是哪些具体类。结构如下所示：
+
+\begin{figure}[H]
+    \centering
+    \scriptsize
+    \begin{tikzpicture}[scale = 1]
+        \begin{interface}[text width=3cm]{WidgetFactory}{0,0}
+            \operation[0]{CreateScrollBar()}
+            \operation[0]{CreateWindow()}
+        \end{interface}
+        \begin{class}[text width=3cm]{DarkWidgetFactory}{-2,-4}
+            \implement{WidgetFactory}
+            \operation{CreateScrollBar()}
+            \operation{CreateWindow()}
+        \end{class}
+        \begin{class}[text width=3cm]{WhiteWidgetFactory}{2,-4}
+            \implement{WidgetFactory}
+            \operation{CreateScrollBar()}
+            \operation{CreateWindow()}
+        \end{class}
+        \begin{class}[text width=2cm]{Client}{12.5,0}
+        \end{class}
+        \begin{scope}
+            \begin{class}[text width=2cm]{Window}{9,-1}
+            \end{class}
+            \begin{class}[text width=2cm]{WhiteWindow}{7,-2.5}
+                \inherit{Window}
+            \end{class}
+            \begin{class}[text width=2cm]{DarkWindow}{11,-2.5}
+                \inherit{Window}
+            \end{class}
+        \end{scope}
+        \begin{scope}[yshift=-4cm]
+            \begin{class}[text width=2cm]{ScrollBar}{9,-1}
+            \end{class}
+            \begin{class}[text width=2cm]{WhiteScrollBar}{7,-2.5}
+                \inherit{ScrollBar}
+            \end{class}
+            \begin{class}[text width=2cm]{DarkScrollBar}{11,-2.5}
+                \inherit{ScrollBar}
+            \end{class}
+        \end{scope}
+        \begin{scope}
+            \draw[umlcd style dashed line,->] (DarkWidgetFactory) -- ++ (2,0) -- ++ (0,-3) -- ++(13,0) |- (DarkWindow);
+            \draw[umlcd style dashed line,->] (DarkWidgetFactory) -- ++ (2,0) -- ++ (0,-3) -- ++(13,0) |- (DarkScrollBar);
+            \draw[umlcd style dashed line,->] (WhiteWidgetFactory) -- ++(3,0) |- (WhiteWindow);
+            \draw[umlcd style dashed line,->] (WhiteWidgetFactory) -- ++(3,0) |- (WhiteScrollBar);
+            \draw[umlcd style dashed line,->] (Client) -- (WidgetFactory);
+            \draw[umlcd style dashed line,->] (Client) |- (Window);
+            \draw[umlcd style dashed line,->] (Client) |- (ScrollBar);
+        \end{scope}
+    \end{tikzpicture}
+\end{figure}
+
+经此改动，客户仅与抽象类定义的接口交互，而不需要特定的具体类的接口。我们后期的维护也仅需要修改抽象类接口中的内容。
+
+\noindent\textbf{适用性}
+
+以下情况适用 AbstractFactory 模式:
+\begin{itemize}
+    \item 系统独立于它的产品的创建，组合和表示。
+    \item 系统要由多个产品嗅裂中的一个来配置。
+    \item 创建一系列相关的产品对象的设计以便进行联合使用。
+    \item 提供一个产品类库，但只想显示它们的接口而不是实现。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+此模式的结构如下所示:
+
+\begin{figure}[H]
+    \centering
+    \scriptsize
+    \begin{tikzpicture}[scale = 1]
+        \begin{interface}[text width=3cm]{AbstractFactory}{0,0}
+            \operation[0]{CreateProductA()}
+            \operation[0]{CreateProductB()}
+        \end{interface}
+        \begin{class}[text width=3cm]{ConcreteFactory1}{-2,-4}
+            \implement{AbstractFactory}
+            \operation{CreateProductA()}
+            \operation{CreateProductB()}
+        \end{class}
+        \begin{class}[text width=3cm]{ConcreteFactory2}{2,-4}
+            \implement{AbstractFactory}
+            \operation{CreateProductA()}
+            \operation{CreateProductB()}
+        \end{class}
+        \begin{class}[text width=2cm]{Client}{12.5,0}
+        \end{class}
+        \begin{scope}
+            \begin{interface}[text width=2.5cm]{AbstractProductA}{9,-1}
+            \end{interface}
+            \begin{class}[text width=2cm]{ProductA2}{7,-2.5}
+                \implement{Window}
+            \end{class}
+            \begin{class}[text width=2cm]{ProductA1}{11,-2.5}
+                \implement{Window}
+            \end{class}
+        \end{scope}
+        \begin{scope}[yshift=-4cm]
+            \begin{interface}[text width=2.5cm]{AbstractProductB}{9,-1}
+            \end{interface}
+            \begin{class}[text width=2cm]{ProductB2}{7,-2.5}
+                \implement{ScrollBar}
+            \end{class}
+            \begin{class}[text width=2cm]{ProductB1}{11,-2.5}
+                \implement{ScrollBar}
+            \end{class}
+        \end{scope}
+        \begin{scope}
+            \draw[umlcd style dashed line,->] (ConcreteFactory1) -- ++ (2,0) -- ++ (0,-3) -- ++(13,0) |- (ProductA1);
+            \draw[umlcd style dashed line,->] (ConcreteFactory1) -- ++ (2,0) -- ++ (0,-3) -- ++(13,0) |- (ProductB1);
+            \draw[umlcd style dashed line,->] (ConcreteFactory2) -- ++(3,0) |- (ProductA2);
+            \draw[umlcd style dashed line,->] (ConcreteFactory2) -- ++(3,0) |- (ProductB2);
+            \draw[umlcd style dashed line,->] (Client) -- (AbstractFactory);
+            \draw[umlcd style dashed line,->] (Client) |- (AbstractProductA);
+            \draw[umlcd style dashed line,->] (Client) |- (AbstractProductB);
+        \end{scope}
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+\begin{itemize}
+    \item AbstractFactory: 声明一个创建抽象产品对象的操作接口。
+    \item ConcreteFactory: 实现创建具体产品对象的操作。
+    \item AbstractProduct: 为一类产品对象声明一个接口。
+    \item ConcreteProduct: 定义一个将被相应的具体工厂创建的产品对象。实现 AbstractProduct 接口。
+    \item Client: 仅使用由 AbstractFactory 和 AbstractProduct 类声明的接口。
+\end{itemize}
+
+\noindent\textbf{协作}
+\begin{itemize}
+    \item 通常在运行时创建一个 ConcreteFactory 类的实例。为创建不同的产品对象，应使用不同的具体工厂。
+    \item AbstractFactory 将产品对象的创建延迟到它的 ConcreteFactory 子类。
+\end{itemize}
+
+\noindent\textbf{优缺点}
+
+\begin{itemize}
+    \item \textbf{分离了具体的类}
+    \item \textbf{易于交换产品系列}
+    \item \textbf{保持了产品的一致性}
+\end{itemize}
+\begin{itemize}
+    \item \textbf{难以支持新种类的产品}: AbstractFactory 接口确定了可以被创建的产品集合，如果需要增加新的产品，组需要修改 AbstractFactory 类及其子类。在实现中给出了解决方案。
+\end{itemize}
+
+\noindent\textbf{实现}
+
+下面是实现 AbstractFactory 模式的一些有用的技术:
+\begin{itemize}
+    \item \textbf{将工厂作为单件}: 一个应用中一般每个产品系列只需要一个 ConcreteFactory 实例，因此工厂最好实现为一个 Singleton。
+    \item \textbf{创建产品}: AbstractFactory 仅声明一个创建产品的接口，真正创建产品是由 ConcreteProduct 子类实现的。最通常的办法是为每一个产品定义一个工厂方法(Factory Method)。如果有多个可能的产品系列，也可以使用 Prototype 模式来实现。
+    \item \textbf{定义可扩展的工厂}: AbstractFactory 通常为每一个种它可以生产的产品定义一个操作。增加一种新的产品要求改变它的接口和它相关的类。一个更灵活但不安全的方案是为创建对象的操作添加一个参数。参数制定了将被创建的对象的种类。可以是字符串，整数，标识符......
+\end{itemize}
+
+\noindent\textbf{相关模式}
+\begin{itemize}
+    \item Factory Method: AbstractFactory 通常用 Factory Method 实现。
+    \item Prototype: AbstractFactory 也可以用 Prototype 实现。
+    \item Singleton: 一个具体的工厂通常是一个单件。
+\end{itemize}
+
+\noindent\textbf{例子}
+
+\begin{itemize}
+    \item Java 实现 GUI: \url{https://zhuanlan.zhihu.com/p/499672744}
+\end{itemize}
+
+\lstinputlisting[language=Python]{../../../scripts/creational/AbstractFactory.py}
+
+\newpage

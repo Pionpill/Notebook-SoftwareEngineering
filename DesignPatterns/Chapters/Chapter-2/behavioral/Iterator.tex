@@ -1,0 +1,83 @@
+\subsection{Iterator (迭代器)}
+
+\noindent\textbf{意图}
+
+提供一种方法顺序访问一个聚合对象中的各个元素，而又不需要暴露该对象的内部表示。
+
+别名: cursor(游标)
+
+\noindent\textbf{动机}
+
+一个聚合对象，如列表(list)，应该提供一种方法来让别人可以访问它的元素，而又不需要暴露该对象的内部表示。
+
+简单来说，我们以某种规则(算法)获取某集合对象中的元素，这种算法就可以被单独写成一个迭代器对象，以获得对应集合中的元素。
+
+\noindent\textbf{适用性}
+
+\begin{itemize}
+    \item 访问一个聚合对象的内容而无需暴露它的内部表示。
+    \item 支持对聚合对象的多种遍历。
+    \item 为遍历不同的聚合结构提供一个统一的接口。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+\begin{figure}[H]
+    \scriptsize
+    \centering
+    \begin{tikzpicture}[scale = 1]
+        \begin{interface}[text width=2cm]{Aggregate}{0,0}
+            \operation[0]{CreateIterator()}
+        \end{interface}
+        \begin{class}[text width=2cm]{Client}{5,0}
+        \end{class}
+        \begin{interface}[text width=2cm]{Iterator}{10,0}
+            \operation[0]{First()}
+            \operation[0]{Next()}
+            \operation[0]{IsDone()}
+            \operation[0]{CurrentItem()}
+        \end{interface}
+        \begin{class}[text width=3cm]{ConcreteAggregate}{0,-3.5}
+            \implement{Aggregate}
+            \operation{CreateIterator()}
+        \end{class}
+        \begin{class}[text width=3cm]{ConcreteIterator}{10,-3.5}
+            \implement{Iterator}
+        \end{class}
+        \draw[umlcd style,fill=white,->] (Client) -- (Aggregate);
+        \draw[umlcd style,fill=white,->] (Client) -- (Iterator);
+        \draw[umlcd style,fill=white,->] (ConcreteIterator) -- (ConcreteAggregate);
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+\begin{itemize}
+    \item \textbf{Iterator}: 迭代器定义访问和遍历元素的接口。
+    \item \textbf{ConcreteIterator}: 具体迭代器实现迭代器接口。对该聚合遍历时跟踪当前位置。
+    \item \textbf{Aggregate}: 聚合定义创建相应迭代器对象的接口。
+    \item \textbf{ConcreteAggregate}: 具体聚合实现创建相应迭代器的接口，该操作返回 ConcreteIterator 的一个适当的实例。
+\end{itemize}
+
+\noindent\textbf{协作}
+\begin{itemize}
+    \item ConcreteIterator 跟踪聚合中的当前对象，并能够计算出待遍历的后继对象。
+\end{itemize}
+
+\noindent\textbf{优缺点}
+
+\begin{itemize}
+    \item \textbf{支持以不同的方式遍历一个聚合}
+    \item \textbf{简化了聚合的接口}
+    \item \textbf{在同一个聚合上可以有多个遍历}
+\end{itemize}
+
+\noindent\textbf{例子}
+
+\begin{itemize}
+    \item Java: \url{https://blog.csdn.net/zhengzhb/article/details/7610745}
+    \item Video: \url{https://www.bilibili.com/video/BV1wK411V791}
+\end{itemize}
+
+\lstinputlisting[language=Python]{../../../scripts/behavioral/Iterator.py}
+
+\newpage

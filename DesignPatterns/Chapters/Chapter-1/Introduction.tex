@@ -1,0 +1,80 @@
+\fbox{
+    \parbox{0.87\textwidth}{
+        \begin{warning}
+            本章都是笔者自己的总结。笔者能力有限，请读者自行斟酌，欢迎任何建议。此外，本章也是对后面章节的一个概述，如果读者有设计模式基础，可以跳过。
+        \end{warning}
+    }
+}
+
+\section{设计模式简介}
+\subsection{设计模式的目的}
+
+设计模式，即在特定场景下解决一般设计问题的类和相互通信的对象的描述。通俗的说，掌握一门语言仅是在语法与特性上学会了一种工具，而设计模式则是使用工具的一类方法，帮助我们更加方便，简洁地完成我们的项目。在程序设计领域，则是增加代码的可复用度，写出高内聚低耦合的代码。
+
+接口是面向对象编程中的一个重要概念，接口的存在让我们将注意力转移到操作而不是实例本身。熟练使用接口，熟悉动态绑定与多态有助于我们更好地理解设计模式。在学习设计模式的过程中，我们应该更加关注对接口编程，而不是针对类编程。此外，设计模式的对象是类与实例，这其中还包含抽象类，混入类等，读者需要对这些概念有一定的了解。
+
+引用 CSDN博主「割韭韭」 的一句话\footnote{原文链接:\url{https://blog.csdn.net/zhengzhb/article/details/7489639}}:
+在现实情况下（至少是我所处的环境当中），很多人往往沉迷于设计模式，他们使用一种设计模式时，从来不去认真考虑所使用的模式是否适合这种场景，而往往只是想展示一下自己对面向对象设计的驾驭能力。编程时有这种心理，往往会发生滥用设计模式的情况。所以，在学习设计模式时，一定要理解模式的适用性。必须做到使用一种模式是因为了解它的优点，不使用一种模式是因为了解它的弊端；而不是使用一种模式是因为不了解它的弊端，不使用一种模式是因为不了解它的优点。
+
+
+\subsection{设计模式的分类}
+
+按作用范围，模式可分为对类/实例起作用。按照模式目的，则可分为创建型，结构型，行为型三种。顾名思义，创建型与对象的创建有关；结构性处理类或对象的组合；行为型对类或对象怎样交互分配职责进行描述。
+
+\begin{table}[H]
+    \centering
+    \caption{设计模式分类}
+    \label{table:设计模式分类}
+    \setlength{\tabcolsep}{4mm}
+    \begin{tabular}{c|c|c|c|c}
+        \toprule
+        & & \multicolumn{3}{c}{\textbf{目的}} \\
+        \cline{3-5}
+        & & \textbf{创建型} & \textbf{结构型} & \textbf{行为型} \\
+        \midrule
+        \multirow{2}{*}{范围} & 类 & Factory Method & Adapter & \makecell{Interpreter \\ Template Method} \\
+        \cline{2-5}
+        & 对象 & \makecell{Abstract Factory \\ Builder \\ Prototye \\ Singleton} & \makecell{Adapter \\ Bridge \\ Composite \\ Decorator \\ Facade \\ Flyweight \\ Proxy} & \makecell{Chain of Responsibility \\ Command \\ Iterator \\ Mediator \\ Memento \\ Observer \\ State \\ Strategy \\ Visitor} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+不同的设计模式所应用的场景与解决的问题不同，其支持的方面如下:
+\begin{center}
+    \small
+    \setlength{\tabcolsep}{3mm}
+    \begin{longtable}{l|l|l}
+        \caption{设计模式所支持的设计的可变方面} \\
+        \toprule
+        \textbf{目的} & \textbf{设计模式} & \textbf{可变的方面}\\
+        \midrule
+        \multirow{5}{*}{创建}& Abstract Factory & 产品对象家族 \\
+        & Builder & 如何创建一个组合对象 \\
+        & Factory Method & 被实例化的子类 \\
+        & Prototype & 被实例化的类 \\
+        & Singleton & 一个类的唯一实例 \\
+        \midrule
+        \multirow{7}{*}{结构} & Adapter & 对象的接口 \\
+        & Bridge & 对象的实现 \\
+        & Composite & 一个对象的结构和组成\\
+        & Decorator & 对象的职责，不生成子类 \\
+        & Facade & 一个子系统的接口 \\
+        & Flyweight & 对象的存储开销 \\
+        & Proxy & 如何访问一个对象，该对象的位置 \\
+        \midrule
+        \multirow{10}{*}{行为} & Chain of Responsibility & 满足一个请求的对象 \\
+        & Command & 合适，怎样满足一个请求 \\
+        & Interpreter & 一个语言的文法及解释 \\
+        & Iterator & 如何遍历，访问一个聚合的各元素 \\
+        & Mediator & 对象间怎样交互，和谁交互 \\
+        & Memento & \makecell[l]{一个对象中哪些私有信息存放在该对象之外，\\以及在什么时候进行存储} \\
+        & Observer & 多个对象依赖于另外一个对象，而这些对象又如何保持一致 \\
+        & State & 对象的状态 \\
+        & Strategy & 算法 \\
+        & Template Method & 算法中的某些步骤 \\
+        & Visitor & 某些可作用于一个(组)对象上的操作，但不修改这些对象的类 \\
+        \bottomrule
+    \end{longtable}
+\end{center}
+
+\newpage

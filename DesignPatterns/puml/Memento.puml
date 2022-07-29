@@ -1,0 +1,20 @@
+@startuml Builder
+participant Caretaker
+participant Originator
+participant Memento
+
+activate Caretaker
+Caretaker -> Originator: CreateMemento()
+activate Originator
+activate Memento
+Originator --> Memento: new Memento
+Originator -> Memento: SetState()
+deactivate Memento
+deactivate Originator
+
+Caretaker -> Originator: SetMemento(Memento)
+activate Originator
+Originator -> Memento: GetState()
+activate Memento
+deactivate Memento
+@enduml

@@ -1,0 +1,84 @@
+\subsection{Mediator (中介者)}
+
+\noindent\textbf{意图}
+
+用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。
+
+\noindent\textbf{动机}
+
+假设有一个机场，有很多飞机需要起飞降落。那么如何安排这些飞机的行动呢。飞机 A 如果要起飞，则需要通知剩下的所有飞机，并且一一确定在同一时间没有其他飞机会起飞，这个过程显然是非常繁琐的。
+
+我们可以构建一个塔台，由塔台来和飞机交互替代飞机与飞机之间的交互。这样飞机的行动就统一由塔台者一个对象负责。
+
+\noindent\textbf{适用性}
+
+\begin{itemize}
+    \item 一组对象以定义良好切复杂的方式进行通信。产生的相互依赖关系结构混乱且难以理解。
+    \item 一个对象引用其他很多对象并且直接与这些对象通信，导致难以复用该对象。
+    \item 想定制一个分布在多个类中的行为，而又不想生成太多的子类。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+\begin{figure}[H]
+    \scriptsize
+    \centering
+    \begin{tikzpicture}[scale = 1]
+        \begin{interface}[text width=2cm]{Mediator}{0,0}
+        \end{interface}
+        \begin{interface}[text width=2cm]{Colleague}{8,0}
+        \end{interface}
+        \draw[umlcd style,fill=white,->] (Mediator) -- (Colleague);
+        \begin{class}[text width=3cm]{ConcreteMediator}{0,-2}
+            \implement{Mediator}
+        \end{class}
+        \begin{class}[text width=3cm]{ConcreteColleague1}{6,-2}
+            \implement{Colleague}
+        \end{class}
+        \begin{class}[text width=3cm]{ConcreteColleague2}{10,-2}
+            \implement{Colleague}
+        \end{class}
+        \draw[umlcd style,fill=white,->] (ConcreteMediator) -- (ConcreteColleague1);
+        \draw[umlcd style,fill opacity=0,fill=white,->] (ConcreteMediator) -- ++(0,-1) -| (ConcreteColleague2);
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+
+\begin{itemize}
+    \item \textbf{Mediator}: 定义一个接口用于与同事对象通信
+    \item \textbf{ConcreteMediator}: 具体中介者通过各同事对象实现协作行为; 了解并维护它的各个同事。
+    \item \textbf{Colleague}: 每一个同事类都需要知道它的中介者对象; 每一个同事对象在需要与其他同事通信的时，与它的终结者通信。
+\end{itemize}
+
+\noindent\textbf{协作}
+
+同事向一个中介者对象发送和接收请求。中介者在各同事间适当地转发请求以实现协作行为。
+
+\noindent\textbf{优缺点}
+
+\begin{itemize}
+    \item \textbf{减少了子类的生成}: Mediator 将原本分布于多个对象间的行为集中在一起。改变这些行为只需要生成 Mediator 子类即可。
+    \item \textbf{将各 Colleague 解耦}
+    \item \textbf{简化了对象协议}
+    \item \textbf{对对象如何协作进行了抽象}
+    \item \textbf{使控制集中化}
+\end{itemize}
+
+\noindent\textbf{实现}
+
+\begin{itemize}
+    \item \textbf{忽略抽象的 Mediator 类}: 当各 Colleague 仅与一个 Mediator 一起工作时，没有必要定义一个抽象的 Mediator 类。
+    \item \textbf{通信}: 当一个感兴趣的事件发生时，Colleague 必须与其 Mediator 通信。一种实现方法是使用 Observer 模式，将 Mediator 实现为一个 Observer，各 Colleague 作为 Subject，一旦其状态改变就发送给 Mediator。Mediator 做出的响应是将状态改变的结果传播给其他的 Colleague。
+\end{itemize}
+
+\noindent\textbf{例子}
+
+\begin{itemize}
+    \item Java: \url{https://blog.csdn.net/qq_45515432/article/details/104041054}
+    \item Video: \url{https://www.bilibili.com/video/BV1hK4y1L7zV}
+\end{itemize}
+
+\lstinputlisting[language=Python]{../../../scripts/behavioral/Mediator.py}
+
+\newpage

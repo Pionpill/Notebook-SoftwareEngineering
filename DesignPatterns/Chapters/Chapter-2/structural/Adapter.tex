@@ -1,0 +1,98 @@
+\subsection{Adapter (适配器)}
+\noindent\textbf{意图}
+
+将一个类的接口转换成客户希望的另一个接口。 Adapter 模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。
+
+别名: 包装器(wrapper)
+
+\noindent\textbf{适用性}
+
+\begin{itemize}
+    \item 想使用一个已经存在的类，但它的接口不符合需求。
+    \item 想创建一个可复用的类，该类需要与其它不相关/不可预见的类协同工作。
+    \item (对象) 想使用一些已经存在的子类，但是不可能对每一个都进行子类化以匹配它们的接口。对象适配器可以适配它们的父类接口。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+类适配器使用多重继承对一个接口与另一个接口进行匹配: 
+
+\begin{figure}[H]
+    \scriptsize
+    \centering
+    \begin{tikzpicture}[scale = 1]
+        \begin{class}[text width=2cm]{Client}{0,0}
+        \end{class}
+        \begin{interface}[text width=2cm]{Target}{4,0}
+            \operation[0]{Request()}
+        \end{interface}
+        \begin{class}[text width=2.5cm]{Adaptee}{8,0}
+            \operation{SpecificRequest()}
+        \end{class}
+        \begin{class}[text width=3.5cm]{Adapter}{6,-3}
+            \implement{Target}
+            \inherit{Adaptee}
+            \operation{Request(): SpecificRequest()}
+        \end{class}
+        \draw[umlcd style,->] (Client) -- (Target);
+    \end{tikzpicture}
+\end{figure}
+
+对象适配器依赖于对象组合:
+
+\begin{figure}[H]
+    \scriptsize
+    \centering
+    \begin{tikzpicture}[scale = 1]
+        \begin{class}[text width=2cm]{Client}{0,0}
+        \end{class}
+        \begin{interface}[text width=2cm]{Target}{4,0}
+            \operation[0]{Request()}
+        \end{interface}
+        \begin{class}[text width=2.5cm]{Adaptee}{9,0}
+            \operation{SpecificRequest()}
+        \end{class}
+        \begin{class}[text width=4.5cm]{Adapter}{4,-3}
+            \implement{Target}
+            \operation{Request(): adaptee -> SpecificRequest()}
+        \end{class}
+        \draw[umlcd style,->] (Client) -- (Target);
+        \draw[umlcd style,fill=white,->] (Adapter) -- ++(3cm,0) |- (Adaptee);
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+
+\begin{itemize}
+    \item \textbf{Target}: 定义 CLient 使用的与特定领域相关的接口。
+    \item \textbf{Client}: 与符合 Target 接口的对象协调。
+    \item \textbf{Adaptee}: 定义一个已经存在的接口，这个接口需要适配。
+    \item \textbf{Adapter}: 对 Adaptee 的接口与 Target 接口进行适配。
+\end{itemize}
+
+\noindent\textbf{协作}
+\begin{itemize}
+    \item Client 在 Adpater 实例上调用了一些操作。接着适配器调用 Adaptee 的操作实现这个请求。
+\end{itemize}
+
+\noindent\textbf{优缺点}
+
+类适配器:
+\begin{itemize}
+    \item 用一个具体的 Adapter 类对 Adaptee 和 Target 进行匹配。结果是当我们想要匹配一个类以及所有它的子类时，类 Adapter 将不能胜任工作。
+\end{itemize}
+
+对象适配器:
+\begin{itemize}
+    \item 允许一个 Adapter 与多个 Adaptee 同时工作。Adapter 也可以一次给所有的 Adaptee 添加功能。
+\end{itemize}
+
+\textbf{例子}
+
+\begin{itemize}
+    \item Java: \url{https://blog.csdn.net/qq_38974638/article/details/124149535}
+\end{itemize}
+
+\lstinputlisting[language=Python]{../../../scripts/structural/Adapter.py}
+
+\newpage

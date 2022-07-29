@@ -1,0 +1,72 @@
+\subsection{Singleton (单件)}
+
+\noindent\textbf{意图}
+
+保证一个类仅有一个实例，并提供一个访问它的全局访问点。
+
+\noindent\textbf{动机}
+
+对于一些类来说，只有一个实例是十分重要的，怎样保证只有一个实例并且这个实例易于被访问呢? 全局变量使得一个对象可以被访问，但它不能防止你实例化多个对象。
+
+一个更好的办法是，让类自身负责保存它的唯一实例。这个类可以保证没有其它实例可以被创建(通过截取创建新对象的请求)，并且它可以通过一个访问该实例的方法。
+
+\noindent\textbf{适用性}
+
+\begin{itemize}
+    \item 类只能有一个实例并且客户可以从一个总所周知的访问点访问它时。
+    \item 当这个唯一实例应该是通过子类化可扩展的，并且用户应该无需更改代码就能使用一个扩展的实例时。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+\begin{figure}[H]
+    \scriptsize
+    \centering
+    \begin{tikzpicture}[scale = 1]
+        \begin{class}[text width=3cm]{Singleton}{0,0}
+            \attribute{static uniqueInstance}
+            \attribute{singletonData}
+            \operation{static Instance()}
+            \operation{SingletonOperation()}
+            \operation{GetSingletonData()}
+        \end{class}
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+\begin{itemize}
+    \item \textbf{Singleton}: 定义一个 Instance 操作，允许客户访问它的唯一实例。
+\end{itemize}
+
+\noindent\textbf{协作}
+\begin{itemize}
+    \item 用户只能通过 Singleton 的 Instance 操作访问一个 Singleton 实例。
+\end{itemize}
+
+\noindent\textbf{优缺点}
+\begin{itemize}
+    \item \textbf{对唯一实例的受控访问}: 因为 Singleton 类封装它的唯一实例，所以可以严控客户怎样以及何时访问它。
+    \item \textbf{缩小名字空间}: Singleton 模式是对全局变量的一种改进，它避免了那些存储唯一实例的全局变量污染名字空间。
+    \item \textbf{允许对操作和表示的精化}: Singleton 类可以有子类，而且用这个扩展类的实例来配置一个应用是很容易的。
+    \item \textbf{允许可变数目的实例}: 可以改变方法限制实例的个数。
+\end{itemize}
+
+\noindent\textbf{实现}
+
+\begin{itemize}
+    \item \textbf{保证一个唯一的实例}
+    \item \textbf{创建 Singleton 类的子类}
+\end{itemize}
+
+\noindent\textbf{例子}
+
+\begin{itemize}
+    \item Java: \url{https://blog.csdn.net/wo_shi_ltb/article/details/78773957}
+    \item Python: \url{https://blog.csdn.net/u010569893/article/details/104264281}
+\end{itemize}
+
+使用 Python/Java 实现 Singleton 模式难免会遇到线程安全，并发问题...在上面两个例子中有对应的解决方案，下面给出的是一个基础的例子。
+
+\lstinputlisting[language=Python]{../../../scripts/creational/Singleton.py}
+
+\newpage

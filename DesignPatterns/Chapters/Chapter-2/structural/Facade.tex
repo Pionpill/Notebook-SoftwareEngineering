@@ -1,0 +1,77 @@
+\subsection{Facade (外观)}
+
+\noindent\textbf{意图}
+
+为子系统中的一组接口提供一个一致的界面，Facade 模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。
+
+\noindent\textbf{动机}
+
+将一个系统划分成若干个子系统有利于降低系统的复杂性。一个常见的设计目标时使子系统间的通信和相互依赖关系达到最小。达到该目标的途径之一就是引入一个外观对象，它为子系统中较一般的设施提供了一个单一而简单的界面。
+
+\noindent\textbf{适用性}
+
+\begin{itemize}
+    \item 要为一个复杂子系统提供一个简单接口时。子系统往往因为不断演化而变得越来越复杂，大多数模式使用时都会产生更多更小的类。这使得子系统更具可复用性，也更容易对系统进行定制。
+    \item 客户程序与抽象类的实现部分之间存在着很大的依赖性。引入 Facade 将这个子系统与客户以及其他的子系统分离，可以提高子系统的独立性与可移植性。
+    \item 当你需要构建一个层次结构的子系统时，使用 Facade 模式定义子系统中每层的入口点。如果子系统之间是相互依赖的，可以让它们仅通过 Facade 进行通信，从而简化了它们之间的依赖关系。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+\begin{figure}[H]
+    \scriptsize
+    \centering
+    \begin{tikzpicture}[scale = 1,umlcd style]
+        \draw[dashed] (-5,-4) rectangle (5,0);
+        \begin{class}[text width=2cm]{Facade}{0,0.5}
+        \end{class}
+        \begin{class}[text width=2cm]{ModuleA}{-3,-1.2}
+        \end{class}
+        \begin{class}[text width=2cm]{ModuleB}{-1,-2.5}
+        \end{class}
+        \begin{class}[text width=2cm]{ModuleC}{2,-2}
+        \end{class}
+        \draw[umlcd style,->] (ModuleA) -- (Facade);
+        \draw[umlcd style,->] (ModuleB) -- (Facade);
+        \draw[umlcd style,->] (ModuleC) -- (Facade);
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+
+\begin{itemize}
+    \item \textbf{Facade}: 知道哪些子系统类负责处理请求；将客户的请求代理给适当的子系统对象。
+    \item \textbf{Subsystem classed}: 实现子系统的功能；处理 Facade 对象指派的任务；没有 Facade 的任何相关信息，即没有指向 Facade 的指针。
+\end{itemize}
+
+\noindent\textbf{协作}
+
+\begin{itemize}
+    \item 客户程序通过发送请求黑 Facade 的方式与子系统通信，Facade 将这些消息转发给适当的子系统对象。尽管是子系统中的有关对象在做实际工作，但 Facade 模式本身也必须将它的接口转换成子系统的接口。
+    \item 使用 Facade 的客户端程序不需要直接访问子系统对象。
+\end{itemize}
+
+\noindent\textbf{优缺点}
+
+\begin{itemize}
+    \item 对客户屏蔽了子系统组件，减少了客户处理对象的数目并使得系统用起来更加方便。
+    \item 是西安了子系统与客户之间的松耦合关系，而子系统内部的功能组件往往是紧耦合的。
+\end{itemize}
+
+\noindent\textbf{实现}
+
+\begin{itemize}
+    \item \textbf{降低客户-子系统之间的耦合度}: 用抽象类实现 Facade 而它的具体子类对应于不同的子系统是心啊，这可以进一步降低客户与子系统的耦合度。
+    \item \textbf{公共子系统与私有子系统}: 一个子系统与一个类的相似之处是，它们都有接口并且都封装了一些东西。而子系统封装了一些类。子系统的公共接口包含所有客户程序都可以访问的类，私有接口仅用于对子系统进行扩充。
+\end{itemize}
+
+\noindent\textbf{例子}
+
+\begin{itemize}
+    \item Java: \url{https://blog.csdn.net/qq_45034708/article/details/114972361}
+    \item Video: \url{https://www.bilibili.com/video/BV1xz4y1X7HW}
+\end{itemize}
+
+\lstinputlisting[language=Python]{../../../scripts/structural/Facade.py}
+
+\newpage

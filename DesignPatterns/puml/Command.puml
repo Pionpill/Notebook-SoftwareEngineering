@@ -1,0 +1,19 @@
+@startuml Command
+participant Receiver
+participant Client
+participant Command
+participant Invoker
+activate Client
+Client --> Command: new Command(Receiver)
+activate Command
+deactivate Command
+Client -> Invoker: StoreCommand(Commnad)
+activate Invoker
+deactivate Client
+
+activate Invoker
+Invoker -> Command: Execute()
+activate Command
+Command -> Receiver: Action()
+activate Receiver
+@enduml

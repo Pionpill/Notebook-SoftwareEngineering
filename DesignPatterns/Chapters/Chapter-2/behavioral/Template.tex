@@ -1,0 +1,76 @@
+\subsection{Template Method (模板方法)}
+
+\noindent\textbf{意图}
+
+定义一个操作中的算法的骨架，而将一些步骤延迟到了子类中。TemplateMethod 使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤。
+
+\noindent\textbf{动机}
+
+当我们需要做一道菜的时候，有以下几个步骤: 放油 -> 爆香 -> 放菜 -> 放盐 -> 翻炒 -> 放调味料 -> 关火 -> 起锅。这是做菜的通用步骤，但不同的菜每个步骤不尽相同，例如油盐放的多少，调味料的选择。
+
+这种通用步骤就被称为模板方法，而具体实现需要自己负责。
+
+\noindent\textbf{适用性}
+
+\begin{itemize}
+    \item 一次性实现一个算法的不变部分，并将可变的行为留给子类来实现。
+    \item 各子类中公共的行为应被提取出来并集中到一个公共父类中以避免代码重复。
+    \item 控制子类扩展。模板方法只在特定点调用钩子操作，这样只允许在这些点进行扩展。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+\begin{figure}[H]
+    \scriptsize
+    \centering
+    \begin{tikzpicture}[scale = 1]
+        \begin{interface}[text width=3cm]{AbstractClass}{0,0}
+            \operation{TemplateMethod()}
+            \operation[0]{PrimativeOperation1()}
+            \operation[0]{PrimativeOperation2()}
+        \end{interface}
+        \begin{class}[text width=3cm]{ConcreteClass}{0,-3}
+            \implement{AbstractClass}
+            \operation[0]{PrimativeOperation1()}
+            \operation[0]{PrimativeOperation2()}
+        \end{class}
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+
+\begin{itemize}
+    \item \textbf{AbstractClass}: 定义抽象的原语操作(primitive operation)，具体的子类将重定义它们以实现一个算法的各步骤; 实现一个模板方法，定义一个算法的骨架。该模板方法不仅调用原语操作，也调用定义在 AbstractClass 或其他对象中的操作。
+    \item \textbf{ConcreteClass}: 实现原语操作以完成算法中与特定子类相关的步骤。
+\end{itemize}
+
+\noindent\textbf{协作}
+
+\begin{itemize}
+    \item ConcreteClass 靠 AbstractClass 来实现算法中不变的步骤。
+    \item TemplateMethod 中以规定顺序调用各原语操作。
+\end{itemize}
+
+\noindent\textbf{效果}
+
+\begin{itemize}
+    \item \textbf{钩子操作}: 提供了缺省的行为，子类可以在必要时进行扩展。钩子操作在缺省情况下通常是空操作。
+\end{itemize}
+
+\noindent\textbf{实现}
+
+\begin{itemize}
+    \item \textbf{尽量减少原语操作}: 需要重定义的操作越多，代码就越冗长。
+    \item \textbf{命名约定}: 可以给被重定义的操作名字加上一个前缀(如 Do-)以识别他们。
+\end{itemize}
+
+\noindent\textbf{例子}
+
+\begin{itemize}
+    \item Java: \url{https://blog.csdn.net/qq_26775359/article/details/109603752}
+    \item Video: \url{https://www.bilibili.com/video/BV1kk4y117j5}
+\end{itemize}
+
+\lstinputlisting[language=Python]{../../../scripts/behavioral/Template.py}
+
+\newpage

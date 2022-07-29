@@ -1,0 +1,100 @@
+\subsection{Flyweight (享元)}
+
+\noindent\textbf{意图}
+
+运用共享技术有效地支持大量细粒度的对象。
+
+\noindent\textbf{动机}
+
+享元即: 共享元素，复用元素。例如在云盘中上传影片，在上传之前，云盘会对影片进行检查，如果发现影片在服务器中已经存在了，就不需要重新上传一份，即保存一份影片的源文件，在用户云盘中添加已有的影片即可。
+
+在享元模式中，有外部状态和内部状态。内部状态是不会改变的，例如影片本身的数据。外部状态会改变，例如影片的上传时间，拥有者昵称。
+
+\noindent\textbf{适用性}
+
+\begin{itemize}
+    \item 一个程序使用了大量的对象。
+    \item 完全由于使用大量的对象造成很大的开销。
+    \item 对象的大多数状态都可变为外部状态。
+    \item 如果删除对象的外部状态，那么可以用相对较少的共享对象取代很多组对象。
+    \item 应用程序不依赖于对象标识。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+\begin{figure}[H]
+    \scriptsize
+    \centering
+    \begin{tikzpicture}[scale = 1]
+        \begin{class}[text width=2.5cm]{FlyweightFactory}{0,0}
+            \operation{GetFlyweight(key)}
+        \end{class}
+        \begin{interface}[text width=3cm]{Flyweight}{6,0}
+            \operation[0]{Operation(extrinsicState)}
+        \end{interface}
+        \begin{class}[text width=2cm]{Client}{0,-3}
+        \end{class}
+        \begin{class}[text width=3cm]{ConcreteFlyweight}{4,-2.5}
+            \implement{Flyweight}
+            \operation{Operation(extrinsicState)}
+            \attribute{intrinsicState}
+        \end{class}
+        \begin{class}[text width=3.3cm]{UnsharedConcreteFlyweight}{8,-2.5}
+            \implement{Flyweight}
+            \operation{Operation(extrinsicState)}
+            \attribute{allState}
+        \end{class}
+        \draw[umlcd style,->] (Client) -- (FlyweightFactory);
+        \draw[umlcd style, fill opacity =0,->] (Client) -- ++ (0,-1) -| (ConcreteFlyweight);
+        \draw[umlcd style,fill opacity =0,->] (Client) -- ++ (0,-1) -| (UnsharedConcreteFlyweight);
+        \aggregation{FlyweightFactory}{}{flyweights}{Flyweight}
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+
+\begin{itemize}
+    \item \textbf{Flyweight}: 描述一个接口，通过这个接口 flyweight 可以接受并作用于外部状态。
+    \item \textbf{ConcreteFlyweight}: 实现 Flyweight 接口，并为内部状态添加存储空间。对象必须是共享的。
+    \item \textbf{UnsharedConcreteFlyweight}: 并非所有 Flyweight 子类都需要被共享。
+    \item \textbf{FlyweightFactory}: 创建并管理 flyweight 对象。确保合理地共享 flyweight。当用户请求一个 flyweight 时Flyweight 会创建一个实例或者一共一个已有的实例。
+    \item \textbf{Client}: 维持一个对 flyweight 的引用。计算或者存储一个(多个) flyweight 的外部状态。
+\end{itemize}
+
+\noindent\textbf{协作}
+
+\begin{itemize}
+    \item flyweight 执行时所需的状态必定是内部的或外部的，内部状态存储于 ConcreteFlyweight 对象之中，而外部对象则是由 Client 对象存储或计算。当用户调用 flyweight 对象的操作时，将该状态传递给它。
+    \item 用户不应直接对 ConcreteFlyweight 类进行实例化，而只能从 FlyweightFactory 对象得到 ConcreteFlyweight 对象，这可以保证对它们适当地进行共享。 
+\end{itemize}
+
+\noindent\textbf{优缺点}
+
+使用 Flyweight 模式时，传输，查找或计算内外部状态都会产生运行时的开销，尤其当 flyweight 原先被存储为内部状态时。然而，空间上的节省抵消了这些开销。共享的 flyweight 越多，节省空间就越大。
+
+存储节约由以下几个因素决定:
+\begin{itemize}
+    \item 由于共享带来的实例总数减少的数目
+    \item 对象内部状态的平均数目
+    \item 外部状态是计算的还是存储的
+\end{itemize}
+
+共享的 flyweight 越多，存储节约也就越多。节约量随着共享状态的增多而增大。当对象使用大量的内部及外部状态，并且外部状态都是计算出来的而非存储的时候，节约量将达到最大。所以，可以用两种方法来节约存储: 用共享减少内部状态的消耗，用计算时间换取对外部状态的存储。
+
+\noindent\textbf{实现}
+
+\begin{itemize}
+    \item \textbf{删除外部状态}: 该模式的可用性在很大程度上取决于是否容易识别外部状态并将它从共享对象中删除。理想情况是: 外部状态可以由一个单独的对象结构计算得到，且该结构的存储需求非常小。
+    \item \textbf{管理共享对象}
+\end{itemize}
+
+\noindent\textbf{实例}
+
+\begin{itemize}
+    \item Java: \url{https://blog.csdn.net/weixin_40980639/article/details/115287157}
+    \item Video: \url{https://www.bilibili.com/video/BV1Ka4y1L7jg}
+\end{itemize}
+
+\lstinputlisting[language=Python]{../../../scripts/structural/Flyweight.py}
+
+\newpage

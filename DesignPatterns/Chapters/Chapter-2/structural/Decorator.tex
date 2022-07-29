@@ -1,0 +1,97 @@
+\subsection{Decorator (装饰)}
+
+\noindent\textbf{意图}
+
+动态地给一个对象添加一些格外的职责。就增加功能来说，Decorator 模式相比生成子类更为灵活。
+
+别名: 包装机(wrapper)
+
+\noindent\textbf{动机}
+
+假定我们有一篇已经填入了全部内容的纸质文章，现在我们需要在文章的开头加上公司名称，结尾加上公司logo。
+
+应该怎么办呢，传统的方式是在文章类的基础上派生出一个新的公司文章类，并添加新的功能，但这些功能和基类并没有逻辑上的联系以及数据交换，因此可以想办法避免类派生。
+
+装饰模式通过将组件嵌入另一个对象的模式为上述问题提供了一个解决方案。
+
+\noindent\textbf{适用性}
+
+\begin{itemize}
+    \item 在不影响其他对象的情况下，以动态透明的方式给单个对象添加职责。
+    \item 处理那些可以撤销的职责。
+    \item 当不能采用子生成类的方式进行扩充时。
+\end{itemize}
+
+\noindent\textbf{结构}
+
+\begin{figure}[H]
+    \scriptsize
+    \centering
+    \begin{tikzpicture}[scale = 1]
+        \begin{interface}[text width=2cm]{Component}{4,0}
+            \operation[0]{Operation()}
+        \end{interface}
+        \begin{class}[text width=3cm]{ConcreteComponent}{2,-2}
+            \implement{Component}
+            \operation{Operation()}
+        \end{class}
+        \begin{interface}[text width=2cm]{Decorator}{6,-2}
+            \inherit{Component}
+            \operation{Operation()}
+        \end{interface}
+        \begin{class}[text width=3cm]{ConcreteDecoratorA}{4,-4}
+            \inherit{Decorator}
+            \attribute{addedState}
+            \operation{Operation()}
+        \end{class}
+        \begin{class}[text width=3cm]{ConcreteDecoratorB}{8,-4}
+            \inherit{Decorator}
+            \operation{Operation()}
+            \operation{AddedBehavior()}
+        \end{class}
+        \draw[umlcd style,fill opacity =0,{diamond}->] (Decorator) -- ++(2,0) |- (Component);
+    \end{tikzpicture}
+\end{figure}
+
+\noindent\textbf{参与者}
+
+\begin{itemize}
+    \item \textbf{Component}: 定义一个对象接口，可以给这些对象动态地添加职责。
+    \item \textbf{ConcreteComponent}: 定义一个对象，可以给这个对象添加一些职责。
+    \item \textbf{Decorator}: 维持一个指向 Component 对象的指针，并定义一个与 Component 接口一致的接口。
+    \item \textbf{ConcreteDecorator}: 向组件添加职责。
+\end{itemize}
+
+\noindent\textbf{协作}
+
+\begin{itemize}
+    \item Decorator 将请求转发给它的 Component 对象，并有可能在转发请求前后执行一些附加的动作。
+\end{itemize}
+
+\noindent\textbf{优缺点}
+
+\begin{itemize}
+    \item \textbf{比静态继承更灵活}
+    \item \textbf{避免在层次结构高层的类有太多的特征}
+    \item \textbf{对象问题}: Decorator 和 Component 不一样，Decorator 是一个透明的包装。我们从对象标识的角度出发，被装饰的对象并不能视作新的对象。如果一个系统采用 Decorator 模式，在运行时可能会出现很多个看上去类似的对象，对于不了解系统实现的人来说，学习系统与排错将变得很困难。
+\end{itemize}
+
+\noindent\textbf{实现}
+
+\begin{itemize}
+    \item \textbf{接口的一致性}: 装饰对象的接口必须与它所装饰的 Component 的接口时一致的，因此，所有的 ConcreteDecorator 类必须有一个公共的父类。
+    \item \textbf{省略抽象的 Decorator 类}: 当只需要添加一个职责时，没有必要定义抽象 Decorator 类。
+    \item \textbf{保持 Component 类的简单性}: 为了保证接口的一致性，组件和装饰必须有一个公共的 Component 父类。因此保持这个类的简单性是很重要的，即它应集中于定义接口而不是存储数据。
+    \item \textbf{改变对象外壳与内核}: 装饰模式应该只改变对象的外壳，内核应该由其他模式控制。
+\end{itemize}
+
+\noindent\textbf{实例}
+
+\begin{itemize}
+    \item Java: \url{https://blog.csdn.net/xiaofeng10330111/article/details/105608235}
+    \item Video: \url{https://www.bilibili.com/video/BV1hp4y1D7MP}
+\end{itemize}
+
+\lstinputlisting[language=Python]{../../../scripts/structural/Decorator.py}
+
+\newpage
