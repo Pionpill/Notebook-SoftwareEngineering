@@ -4,7 +4,6 @@ out
 *.fls
 *.log
 *.out
-*.pdf
 *.gz
 *.toc
 *.xdv
